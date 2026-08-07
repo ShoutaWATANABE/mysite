@@ -1,5 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
+/** globals.css の :root に指定した変数の transition と揃える */
+const TRANSITION_MS = 300;
+
 /**
  * ライト / ダークの切り替えボタン。
  *
@@ -13,6 +18,12 @@ const buttonClassName =
   "border-line text-muted hover:text-accent focus-visible:outline-accent fixed top-4 right-4 grid size-11 cursor-pointer place-items-center rounded-full border transition-[color] duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 sm:top-6 sm:right-6";
 
 export function ThemeToggle() {
+  const timerRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    return () => window.clearTimeout(timerRef.current);
+  }, []);
+
   const toggle = () => {
     const root = document.documentElement;
     const current =
@@ -21,6 +32,14 @@ export function ThemeToggle() {
         ? "dark"
         : "light");
     const next = current === "dark" ? "light" : "dark";
+
+    // 切り替えの間だけ要素側の transition を止め、配色は変数の補間だけで
+    // 変わるようにする。連打された場合は先に予約したタイマーを破棄する。
+    root.classList.add("theme-switching");
+    window.clearTimeout(timerRef.current);
+    timerRef.current = window.setTimeout(() => {
+      root.classList.remove("theme-switching");
+    }, TRANSITION_MS + 20);
 
     root.dataset.theme = next;
     try {

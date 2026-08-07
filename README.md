@@ -58,9 +58,13 @@ Noto Sans JP は日本語グリフを `unicode-range` で分割配信します�
 
 保存済みのテーマは `src/app/layout.tsx` の同期スクリプトで描画前に適用します。hydration を待つと配色が一瞬ちらつくためです。ボタンのアイコンも同じ理由で React の状態ではなく CSS で出し分けています。
 
-切り替え時は配色を 300ms でフェードします。transition を常時有効にすると hover など他の transition と干渉するため、切り替えの前後だけ `theme-transition` クラスで有効にします。`prefers-reduced-motion` が指定されている場合はクラスを付けません。
+切り替え時は配色を 300ms でフェードします。要素側に transition を掛けるのではなく、`@property` で配色変数を `<color>` として型付けし、`:root` の transition で変数の値そのものを補間します。要素側に掛けると、transition の付け外しのたびに合成レイヤーの昇格と降格が起きて再ラスタライズされ、大きな文字がちらつきます。
 
-アイコンは `display` では遷移できないので、太陽と月を grid の同じセルに重ね、opacity と回転で入れ替えます。
+切り替えの間だけ `theme-switching` クラスを付け、要素側の transition を止めます。hover 用に transition を持つ要素は、変数の補間と要素側の transition で二重に補間され、他より遅れて色が変わるためです。切り替えが終わればクラスは外れ、hover の遷移は元に戻ります。
+
+`prefers-reduced-motion` が指定されている場合は、`*` に対する `transition-duration` の指定が `:root` にも効くため、フェードなしで切り替わります。
+
+アイコンは `display` では遷移できないので、太陽と月を grid の同じセルに重ね、opacity と回転で入れ替えます。こちらは切り替えの本体なので `theme-switching` の対象から除外します。
 
 ## ライセンス
 

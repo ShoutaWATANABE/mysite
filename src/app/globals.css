@@ -97,6 +97,24 @@ body {
 }
 
 /*
+ * テーマ切り替えの間だけ、要素側の transition を止める。
+ * 配色は :root の変数補間で変わるので、要素側でも遷移させると二重に補間され、
+ * hover 用に transition を持つ要素 (矢印やボタン) だけ色の変化が遅れてしまう。
+ * transition を «足す» のではなく «止める» ので、合成レイヤーの昇格は起きない。
+ */
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition-property: none !important;
+}
+
+/* アイコンのクロスフェードは切り替えの本体なので維持する */
+:root.theme-switching .icon-sun,
+:root.theme-switching .icon-moon {
+  transition-property: opacity, transform !important;
+}
+
+/*
  * テーマ切り替えボタンのアイコン出し分け。
  * 現在の状態は hydration 前には JS から判定できないため、React の状態ではなく
  * CSS で切り替える。これで mismatch が起きない。
