@@ -1,34 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# mysite
 
-## Getting Started
+[shoutawatanabe.info](https://shoutawatanabe.info) のソースコードです。
 
-First, run the development server:
+## 概要
+
+1 ページ完結のプロフィールサイトです。氏名、プロフィール、外部リンクのみで構成します。
+
+旧サイト（[portfolio](https://github.com/ShoutaWATANABE/portfolio) / Nuxt 2）を全面刷新したもので、works・skill・blog・contact の各ページは廃止しました。
+
+## 技術構成
+
+| 項目 | 内容 |
+|------|------|
+| フレームワーク | Next.js 16（App Router） |
+| 言語 | TypeScript |
+| スタイル | Tailwind CSS v4 |
+| ホスティング | Vercel |
+| フォント | Outfit（欧文）/ Noto Sans JP（和文） |
+
+## 必要条件
+
+- Node.js 20 以上
+
+## セットアップ
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 開発
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run dev    # 開発サーバーを起動する（http://localhost:3000）
+npm run build  # 本番ビルドを生成する
+npm run lint   # ESLint を実行する
+```
 
-## Learn More
+## 実装上の注意点
 
-To learn more about Next.js, take a look at the following resources:
+### フォントの読み込み
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Noto Sans JP は日本語グリフを `unicode-range` で分割配信します。`subsets` に `japanese` は存在せず、preload すると使わないチャンクまで取得するため、`preload: false` を指定しています。読み込みが完了するまでは `Hiragino Sans` などのシステムフォントにフォールバックします。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### OG 画像と favicon
 
-## Deploy on Vercel
+`src/app/opengraph-image.tsx` と `src/app/icon.tsx` で `ImageResponse` を使い、ビルド時に生成します。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`ImageResponse` が対応するフォント形式は ttf・otf・woff のみで、woff2 は使えません。サイト本体と字面を揃えるため、Outfit の woff を `src/app/fonts/` に同梱しています。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+日本語フォントは同梱していないため、OG 画像は欧文のみで構成します。
+
+### ダークモード
+
+`prefers-color-scheme` に追従します。配色は `src/app/globals.css` の CSS 変数で定義します。アクセント色はダーク背景でのコントラストを確保するため、ライトとダークで別の値を指定しています。
+
+## ライセンス
+
+個人サイトのため、ソースコードの再利用は想定していません。

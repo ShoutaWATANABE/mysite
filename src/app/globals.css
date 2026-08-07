@@ -1,1 +1,54 @@
 @import "tailwindcss";
+
+:root {
+  --bg: #fafafa;
+  --fg: #0f0f0f;
+  --muted: #52525b;
+  --line: #dcdce0;
+  --accent: #29649f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0f0f;
+    --fg: #fafafa;
+    --muted: #a1a1aa;
+    --line: #2a2a2e;
+    /* 旧サイトのアクセント #29649f はダーク背景ではコントラストが足りないため明度を上げている */
+    --accent: #6ba8e5;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-noto-sans-jp), "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    Meiryo, ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 日本語を文節単位で改行する。未対応ブラウザでは無視される */
+.text-jp {
+  word-break: auto-phrase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
