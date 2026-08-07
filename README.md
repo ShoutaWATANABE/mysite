@@ -6,7 +6,7 @@
 
 1 ページ完結のプロフィールサイトです。氏名、プロフィール、外部リンクのみで構成します。
 
-旧サイト（[portfolio](https://github.com/ShoutaWATANABE/portfolio) / Nuxt 2）を全面刷新したもので、works・skill・blog・contact の各ページは廃止しました。
+旧サイト（Nuxt 2 製のポートフォリオ）を全面刷新したもので、works・skill・blog・contact の各ページは廃止しました。
 
 ## 技術構成
 
