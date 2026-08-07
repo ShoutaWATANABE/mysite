@@ -1,23 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
-/** globals.css の .theme-transition に指定した transition と揃える */
-const TRANSITION_MS = 300;
-
 /**
  * ライト / ダークの切り替えボタン。
  *
- * 選択は localStorage に保存し、未選択なら OS の設定に従う。表示中のアイコンは
- * globals.css 側で出し分けるため、このコンポーネントは状態を持たない。
+ * 選択は localStorage に保存し、未選択なら OS の設定に従う。表示中のアイコンと
+ * 切り替え時のフェードはいずれも globals.css 側で処理するため、このコンポーネントは
+ * 状態を持たない。
  */
 export function ThemeToggle() {
-  const timerRef = useRef<number | undefined>(undefined);
-
-  useEffect(() => {
-    return () => window.clearTimeout(timerRef.current);
-  }, []);
-
   const toggle = () => {
     const root = document.documentElement;
     const current =
@@ -26,16 +16,6 @@ export function ThemeToggle() {
         ? "dark"
         : "light");
     const next = current === "dark" ? "light" : "dark";
-
-    // 配色のフェードは切り替えの瞬間だけ有効にする。連打された場合は先に
-    // 予約したタイマーを破棄して、最後の切り替えぶんだけ残す。
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      root.classList.add("theme-transition");
-      window.clearTimeout(timerRef.current);
-      timerRef.current = window.setTimeout(() => {
-        root.classList.remove("theme-transition");
-      }, TRANSITION_MS + 20);
-    }
 
     root.dataset.theme = next;
     try {
@@ -50,7 +30,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="配色テーマを切り替える"
-      className="border-line text-muted hover:text-accent hover:border-accent focus-visible:outline-accent fixed top-4 right-4 grid size-11 cursor-pointer place-items-center rounded-full border transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 sm:top-6 sm:right-6"
+      className="border-line text-muted hover:text-accent hover:border-accent focus-visible:outline-accent fixed top-4 right-4 grid size-11 cursor-pointer place-items-center rounded-full border transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 sm:top-6 sm:right-6"
     >
       <svg
         className="icon-moon size-5"

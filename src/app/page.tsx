@@ -50,7 +50,7 @@ export default function Home() {
                 href={link.href}
                 target="_blank"
                 rel="me noopener noreferrer"
-                className="border-line hover:text-accent focus-visible:outline-accent group flex items-center justify-between border-b py-3.5 text-lg transition-colors duration-200 focus-visible:rounded-xs focus-visible:outline-2 focus-visible:outline-offset-4"
+                className="border-line hover:text-accent focus-visible:outline-accent group flex items-center justify-between border-b py-3.5 text-lg transition-colors duration-300 focus-visible:rounded-xs focus-visible:outline-2 focus-visible:outline-offset-4"
               >
                 <span className="font-display tracking-wide">
                   {link.label}
@@ -58,7 +58,7 @@ export default function Home() {
                 </span>
                 <span
                   aria-hidden="true"
-                  className="text-muted group-hover:text-accent transition-transform duration-200 group-hover:translate-x-1"
+                  className="text-muted group-hover:text-accent transition-transform duration-300 group-hover:translate-x-1"
                 >
                   →
                 </span>

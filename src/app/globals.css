@@ -1,5 +1,37 @@
 @import "tailwindcss";
 
+/*
+ * 配色変数を色として型付けし、変数の値そのものを補間できるようにする。
+ * これでテーマ切り替えのフェードが :root の transition だけで完結する。
+ * 全要素 (*) に transition を掛ける方式だと、掛け外しのたびに合成レイヤーの
+ * 昇格と降格が起きて再ラスタライズされ、大きな文字がちらついてしまう。
+ */
+@property --bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fafafa;
+}
+@property --fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #1c1c20;
+}
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #52525b;
+}
+@property --line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #dcdce0;
+}
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #29649f;
+}
+
 /* 既定はライト。真っ黒 (#000 / #0f0f0f) は避け、わずかに青みを含んだ濃灰にしている */
 :root {
   color-scheme: light;
@@ -8,6 +40,13 @@
   --muted: #52525b;
   --line: #dcdce0;
   --accent: #29649f;
+
+  transition:
+    --bg 300ms ease,
+    --fg 300ms ease,
+    --muted 300ms ease,
+    --line 300ms ease,
+    --accent 300ms ease;
 }
 
 /* OS がダークかつユーザーが明示的にライトを選んでいない場合 */
@@ -55,23 +94,6 @@ body {
 /* 日本語を文節単位で改行する。未対応ブラウザでは無視される */
 .text-jp {
   word-break: auto-phrase;
-}
-
-/*
- * テーマ切り替え時に配色をフェードさせる。
- * 常時有効にするとホバーなど他の transition と干渉するため、切り替えの前後だけ
- * クラスで有効にする。reduced motion の場合はスクリプト側でクラスを付けない。
- */
-.theme-transition,
-.theme-transition *,
-.theme-transition *::before,
-.theme-transition *::after {
-  transition:
-    background-color 300ms ease,
-    border-color 300ms ease,
-    color 300ms ease,
-    fill 300ms ease,
-    stroke 300ms ease;
 }
 
 /*
