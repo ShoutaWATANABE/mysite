@@ -58,38 +58,77 @@ body {
 }
 
 /*
+ * テーマ切り替え時に配色をフェードさせる。
+ * 常時有効にするとホバーなど他の transition と干渉するため、切り替えの前後だけ
+ * クラスで有効にする。reduced motion の場合はスクリプト側でクラスを付けない。
+ */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    fill 300ms ease,
+    stroke 300ms ease;
+}
+
+/*
  * テーマ切り替えボタンのアイコン出し分け。
  * 現在の状態は hydration 前には JS から判定できないため、React の状態ではなく
  * CSS で切り替える。これで mismatch が起きない。
  * 表示するのは「切り替えた先」のアイコン（ダーク表示中なら太陽）。
+ * display では遷移できないので、2 つを重ねて opacity と回転で入れ替える。
  */
+.icon-sun,
+.icon-moon {
+  /* ボタンは grid。2 つを同じセルに置いて重ねる */
+  grid-area: 1 / 1;
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+}
+
 .icon-sun {
-  display: none;
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+.icon-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .icon-sun {
-    display: block;
+    opacity: 1;
+    transform: rotate(0) scale(1);
   }
   :root:not([data-theme="light"]) .icon-moon {
-    display: none;
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
   }
 }
 
 :root[data-theme="dark"] .icon-sun {
-  display: block;
+  opacity: 1;
+  transform: rotate(0) scale(1);
 }
 
 :root[data-theme="dark"] .icon-moon {
-  display: none;
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
 }
 
 :root[data-theme="light"] .icon-sun {
-  display: none;
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
 }
 
 :root[data-theme="light"] .icon-moon {
-  display: block;
+  opacity: 1;
+  transform: rotate(0) scale(1);
 }
 
 @media (prefers-reduced-motion: reduce) {

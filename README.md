@@ -58,6 +58,10 @@ Noto Sans JP は日本語グリフを `unicode-range` で分割配信します�
 
 保存済みのテーマは `src/app/layout.tsx` の同期スクリプトで描画前に適用します。hydration を待つと配色が一瞬ちらつくためです。ボタンのアイコンも同じ理由で React の状態ではなく CSS で出し分けています。
 
+切り替え時は配色を 300ms でフェードします。transition を常時有効にすると hover など他の transition と干渉するため、切り替えの前後だけ `theme-transition` クラスで有効にします。`prefers-reduced-motion` が指定されている場合はクラスを付けません。
+
+アイコンは `display` では遷移できないので、太陽と月を grid の同じセルに重ね、opacity と回転で入れ替えます。
+
 ## ライセンス
 
 個人サイトのため、ソースコードの再利用は想定していません。
