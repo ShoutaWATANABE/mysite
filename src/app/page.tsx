@@ -13,6 +13,12 @@ const links = [
 // ビルド時に評価される。年が変わったら再デプロイで更新される。
 const currentYear = new Date().getFullYear();
 
+// 下線 (border-color) は --line の補間で色が変わるため、要素側では color だけを
+// 遷移させる。両方に transition を掛けると二重に補間され、文字と下線の色が
+// 変わるタイミングにずれが出る。
+const linkClassName =
+  "border-line hover:text-accent focus-visible:outline-accent group flex items-center justify-between border-b py-3.5 text-lg transition-[color] duration-300 focus-visible:rounded-xs focus-visible:outline-2 focus-visible:outline-offset-4";
+
 export default function Home() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-3xl flex-col justify-center gap-8 px-6 py-14 sm:px-10">
@@ -50,7 +56,7 @@ export default function Home() {
                 href={link.href}
                 target="_blank"
                 rel="me noopener noreferrer"
-                className="border-line hover:text-accent focus-visible:outline-accent group flex items-center justify-between border-b py-3.5 text-lg transition-colors duration-300 focus-visible:rounded-xs focus-visible:outline-2 focus-visible:outline-offset-4"
+                className={linkClassName}
               >
                 <span className="font-display tracking-wide">
                   {link.label}
@@ -58,7 +64,7 @@ export default function Home() {
                 </span>
                 <span
                   aria-hidden="true"
-                  className="text-muted group-hover:text-accent transition-transform duration-300 group-hover:translate-x-1"
+                  className="text-muted group-hover:text-accent transition-[color,transform] duration-300 group-hover:translate-x-1"
                 >
                   →
                 </span>

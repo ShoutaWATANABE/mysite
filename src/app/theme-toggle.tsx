@@ -7,6 +7,11 @@
  * 切り替え時のフェードはいずれも globals.css 側で処理するため、このコンポーネントは
  * 状態を持たない。
  */
+// 枠線 (border-color) は --line の補間で色が変わるため、要素側では color だけを
+// 遷移させる。両方に transition を掛けると二重に補間されてずれが出る。
+const buttonClassName =
+  "border-line text-muted hover:text-accent focus-visible:outline-accent fixed top-4 right-4 grid size-11 cursor-pointer place-items-center rounded-full border transition-[color] duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 sm:top-6 sm:right-6";
+
 export function ThemeToggle() {
   const toggle = () => {
     const root = document.documentElement;
@@ -30,7 +35,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="配色テーマを切り替える"
-      className="border-line text-muted hover:text-accent hover:border-accent focus-visible:outline-accent fixed top-4 right-4 grid size-11 cursor-pointer place-items-center rounded-full border transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 sm:top-6 sm:right-6"
+      className={buttonClassName}
     >
       <svg
         className="icon-moon size-5"
