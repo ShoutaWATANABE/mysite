@@ -1,22 +1,36 @@
 @import "tailwindcss";
 
+/* 既定はライト。真っ黒 (#000 / #0f0f0f) は避け、わずかに青みを含んだ濃灰にしている */
 :root {
+  color-scheme: light;
   --bg: #fafafa;
-  --fg: #0f0f0f;
+  --fg: #1c1c20;
   --muted: #52525b;
   --line: #dcdce0;
   --accent: #29649f;
 }
 
+/* OS がダークかつユーザーが明示的にライトを選んでいない場合 */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f0f0f;
-    --fg: #fafafa;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #17171a;
+    --fg: #f2f2f3;
     --muted: #a1a1aa;
-    --line: #2a2a2e;
+    --line: #2e2e34;
     /* 旧サイトのアクセント #29649f はダーク背景ではコントラストが足りないため明度を上げている */
     --accent: #6ba8e5;
   }
+}
+
+/* ユーザーがトグルでダークを選んだ場合は OS 設定より優先する */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #17171a;
+  --fg: #f2f2f3;
+  --muted: #a1a1aa;
+  --line: #2e2e34;
+  --accent: #6ba8e5;
 }
 
 @theme inline {
@@ -41,6 +55,41 @@ body {
 /* 日本語を文節単位で改行する。未対応ブラウザでは無視される */
 .text-jp {
   word-break: auto-phrase;
+}
+
+/*
+ * テーマ切り替えボタンのアイコン出し分け。
+ * 現在の状態は hydration 前には JS から判定できないため、React の状態ではなく
+ * CSS で切り替える。これで mismatch が起きない。
+ * 表示するのは「切り替えた先」のアイコン（ダーク表示中なら太陽）。
+ */
+.icon-sun {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .icon-sun {
+    display: block;
+  }
+  :root:not([data-theme="light"]) .icon-moon {
+    display: none;
+  }
+}
+
+:root[data-theme="dark"] .icon-sun {
+  display: block;
+}
+
+:root[data-theme="dark"] .icon-moon {
+  display: none;
+}
+
+:root[data-theme="light"] .icon-sun {
+  display: none;
+}
+
+:root[data-theme="light"] .icon-moon {
+  display: block;
 }
 
 @media (prefers-reduced-motion: reduce) {
